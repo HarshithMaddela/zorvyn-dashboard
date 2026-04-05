@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Dock from "./pages/dock";
-import Dashboard from "./pages/dashboard";
+import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";

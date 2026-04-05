@@ -168,7 +168,7 @@ This project was designed with a focus on:
 1. **User experience first** → intuitive navigation and interactions
 2. **Component modularity** → reusable and scalable structure
 3. **State-driven UI** → all views react to data changes
-4. **Clean design** → minimal, readable, and modern
+4. **Clean design** → minimal, readable and modern
 
 Special attention was given to:
 
@@ -178,7 +178,7 @@ Special attention was given to:
 
 ## Conclusion
 
-This project demonstrates how a frontend application can be structured, styled, and made interactive using modern tools and best practices.
+This project demonstrates how a frontend application can be structured, styled and made interactive using modern tools and best practices.
 
 ## Author
 

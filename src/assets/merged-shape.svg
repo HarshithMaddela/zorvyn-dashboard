@@ -1,0 +1,8 @@
+<svg width="230" height="140" viewBox="0 0 230 140" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#5c00cc" stroke="none" stroke-width="0">
+    <path d="M 80 70 L 190 70 A 30 30 0 0 1 220 100 L 220 100 A 30 30 0 0 1 190 130 L 112 130 A 30 30 0 0 1 80 100 L 80 70 L 80 70 Z" />
+    <path d="M 40 10 L 120 10 A 30 30 0 0 1 150 40 L 150 70 L 150 70 L 42 70 A 30 30 0 0 1 10 40 L 10 40 A 30 30 0 0 1 40 10 Z" />
+    <path d="M 0 0 C 0 23.872 5.76 32 32 32 H 0 Z" transform="translate(150, 38)" />
+    <path d="M 0 0 C 0 -23.872 -5.76 -32 -32 -32 H 0 Z" transform="translate(80, 102)" />
+  </g>
+</svg>

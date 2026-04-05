@@ -1,0 +1,115 @@
+.dock-outer {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.dock-panel {
+  pointer-events: auto;
+  position: absolute;
+  bottom: 24px;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 10px 14px;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 32px;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dock-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  cursor: pointer;
+  position: relative;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.dock-item:hover {
+  background: var(--accent-gradient);
+  border-color: transparent;
+}
+
+.dock-icon {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.dock-item:hover .dock-icon {
+  color: white;
+}
+
+.dock-label {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+
+  background: var(--text);
+  color: var(--bg-color);
+  font-weight: 600;
+
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dock-label::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: var(--text);
+}
+
+@media (max-width: 768px) {
+  .dock-panel {
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 24px;
+  }
+
+  .dock-item {
+    box-shadow: none;
+  }
+
+  .dock-label {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .dock-panel {
+    bottom: 12px;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+}

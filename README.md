@@ -128,7 +128,7 @@ git clone https://github.com/HarshithMaddela/zorvyn-dashboard.git
 2. Navigate into the project:
 
 ```
-cd zorvyn-dashboard
+cd finance-dashboard
 ```
 
 3. Install dependencies:

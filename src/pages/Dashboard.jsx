@@ -141,6 +141,10 @@ export default function Dashboard({ transactions }) {
         gap: "2rem",
       }}
     >
+      <div className="dashboard-header">
+        <h2 className="gradient-text">Finance Dashboard</h2>
+        <p>Track your income, expenses and financial insights in one place</p>
+      </div>
       <div
         className="summary-grid"
         style={{ width: "100%", maxWidth: "1000px" }}

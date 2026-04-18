@@ -175,7 +175,7 @@ export default function App() {
           >
             <img src={logo} alt="Zorvyn Logo" className="logo" />
             <h1>
-              <span className="text-gradient">Zorvyn</span> Insights
+              <span className="text-gradient">Finexa</span>
             </h1>
           </div>
         </div>
@@ -279,7 +279,7 @@ export default function App() {
       <footer className="app-footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <span className="text-gradient">Zorvyn</span> Insights
+            <span className="text-gradient">Finexa</span>
           </div>
           <div className="footer-links">
             <a href="#about">About Us</a>
@@ -289,8 +289,8 @@ export default function App() {
           </div>
         </div>
         <div className="footer-bottom">
-          &copy; {new Date().getFullYear()} Zorvyn Insights. All rights
-          reserved. Made in India.
+          &copy; {new Date().getFullYear()} Finexa. All rights reserved. Made in
+          India.
         </div>
       </footer>
 

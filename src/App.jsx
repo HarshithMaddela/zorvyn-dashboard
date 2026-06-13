@@ -199,7 +199,7 @@ export default function App() {
   const renderPageContent = () => {
     switch (activePage) {
       case "dashboard":
-        return <Dashboard transactions={transactions} />;
+        return <Dashboard transactions={transactions || []} />;
       case "transactions":
         return (
           <Transactions

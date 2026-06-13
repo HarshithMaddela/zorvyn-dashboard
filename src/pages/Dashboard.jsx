@@ -1,4 +1,3 @@
-
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import "./Dashboard.css";
@@ -13,7 +12,7 @@ import {
   Cell,
 } from "recharts";
 
-export default function Dashboard({ transactions }) {
+export default function Dashboard({ transactions = [] }) {
   const { income, expense, balance } = useMemo(() => {
     let inc = 0,
       exp = 0;
@@ -27,7 +26,7 @@ export default function Dashboard({ transactions }) {
     const map = {};
     let runningBalance = 0;
 
-    const sorted = [...transactions].sort(
+    const sorted = [...(transactions || [])].sort(
       (a, b) => new Date(a.date) - new Date(b.date),
     );
 

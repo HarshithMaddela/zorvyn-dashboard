@@ -43,8 +43,19 @@ import {
 export default function App() {
   const { user, logout } = useAuth();
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -64,9 +75,7 @@ export default function App() {
   const [notifications, setNotifications] = useState([]);
 
   const [transactions, setTransactions] = useState([]);
-  if (!user) {
-    return <Login />;
-  }
+
   useEffect(() => {
     if (!user) return;
 
@@ -94,7 +103,9 @@ export default function App() {
       isDarkMode ? "dark" : "light",
     );
   }, [isDarkMode]);
-
+  if (!user) {
+    return <Login />;
+  }
   const handleSaveTransaction = async (tx) => {
     if (tx.id) {
       await updateTransaction(user.uid, tx.id, tx);

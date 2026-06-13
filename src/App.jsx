@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Login from "./pages/Login";
@@ -55,9 +54,7 @@ export default function App() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  if (!user) {
-    return <Login />;
-  }
+
   const [activePage, setActivePage] = useState("dashboard");
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -67,6 +64,9 @@ export default function App() {
   const [notifications, setNotifications] = useState([]);
 
   const [transactions, setTransactions] = useState([]);
+  if (!user) {
+    return <Login />;
+  }
   useEffect(() => {
     if (!user) return;
 

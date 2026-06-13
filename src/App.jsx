@@ -1,11 +1,26 @@
+
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Login from "./pages/Login";
+import { useAuth } from "./context/AuthContext";
 import Dock from "./pages/dock";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import logo from "../src/assets/merged-shape.svg";
+import Budgets from "./pages/Budgets";
+import Goals from "./pages/Goals";
+import Wallet from "./pages/Wallet";
+import AboutUs from "./pages/AboutUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import ContactSupport from "./pages/ContactSupport";
+
+import Subscriptions from "./pages/Subscriptions";
+import { createNotification } from "./services/notificationService";
+import { getNotifications } from "./services/notificationService";
+
 import {
   VscDashboard,
   VscCreditCard,
@@ -13,53 +28,66 @@ import {
   VscColorMode,
   VscBell,
   VscSettingsGear,
+  VscTarget,
+  VscGraph,
+  VscRocket,
 } from "react-icons/vsc";
 import "./index.css";
 
+import {
+  getTransactions,
+  addTransaction,
+  updateTransaction,
+  deleteTransaction,
+} from "./services/transactionService";
+
 export default function App() {
+  const { user, logout } = useAuth();
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  if (!user) {
+    return <Login />;
+  }
   const [activePage, setActivePage] = useState("dashboard");
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [userRole, setUserRole] = useState("admin");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTx, setEditingTx] = useState(null);
+  const [notifications, setNotifications] = useState([]);
 
-  const [transactions, setTransactions] = useState(() => {
-    const savedTransactions = localStorage.getItem("zorvyn-transactions");
-    if (savedTransactions) return JSON.parse(savedTransactions);
+  const [transactions, setTransactions] = useState([]);
+  useEffect(() => {
+    if (!user) return;
 
-    return [
-      {
-        id: 1,
-        date: "2026-04-01",
-        amount: 30000,
-        category: "Salary",
-        type: "income",
-        description: "Tech Corp Inc.",
-      },
-      {
-        id: 2,
-        date: "2026-04-01",
-        amount: 500,
-        category: "Food",
-        type: "expense",
-        description: "Starbucks",
-      },
-      {
-        id: 3,
-        date: "2026-04-02",
-        amount: 1200,
-        category: "Shopping",
-        type: "expense",
-        description: "Amazon Gadgets",
-      },
-    ];
-  });
+    async function loadNotifications() {
+      const data = await getNotifications(user.uid);
+      setNotifications(data);
+    }
+
+    loadNotifications();
+  }, [user]);
 
   useEffect(() => {
-    localStorage.setItem("zorvyn-transactions", JSON.stringify(transactions));
-  }, [transactions]);
+    if (!user) return;
 
+    const loadTransactions = async () => {
+      const data = await getTransactions(user.uid);
+      setTransactions(data);
+    };
+
+    loadTransactions();
+  }, [user]);
   useEffect(() => {
     document.documentElement.setAttribute(
       "data-theme",
@@ -67,27 +95,42 @@ export default function App() {
     );
   }, [isDarkMode]);
 
-  const handleSaveTransaction = (tx) => {
+  const handleSaveTransaction = async (tx) => {
     if (tx.id) {
+      await updateTransaction(user.uid, tx.id, tx);
+      await createNotification(
+        user.uid,
+        `${tx.type === "income" ? "Income" : "Expense"} updated: ₹${tx.amount}`,
+      );
+
       setTransactions((prev) => prev.map((t) => (t.id === tx.id ? tx : t)));
     } else {
       const newTx = {
         ...tx,
-        id: Date.now(),
-        // Fallbacks in case the user leaves fields blank
         date: tx.date || new Date().toISOString().slice(0, 10),
         category: tx.category || "Other",
         description:
           tx.description || (tx.type === "income" ? "Income" : "Expense"),
       };
-      setTransactions((prev) => [...prev, newTx]);
+
+      await addTransaction(user.uid, newTx);
+      await createNotification(
+        user.uid,
+        `${newTx.type === "income" ? "Income" : "Expense"} added: ₹${newTx.amount}`,
+      );
+
+      const refreshed = await getTransactions(user.uid);
+
+      setTransactions(refreshed);
     }
 
     setIsModalOpen(false);
     setEditingTx(null);
   };
+  const handleDelete = async (id) => {
+    await deleteTransaction(user.uid, id);
+    await createNotification(user.uid, "Transaction deleted", "warning");
 
-  const handleDelete = (id) => {
     setTransactions((prev) => prev.filter((t) => t.id !== id));
   };
 
@@ -95,7 +138,13 @@ export default function App() {
     setEditingTx({ type });
     setIsModalOpen(true);
   };
+  const onAddIncome = () => {
+    openAddModal("income");
+  };
 
+  const onAddExpense = () => {
+    openAddModal("expense");
+  };
   const items = [
     {
       icon: <VscDashboard size={24} />,
@@ -107,20 +156,32 @@ export default function App() {
       label: "Transactions",
       onClick: () => setActivePage("transactions"),
     },
-    {
-      icon: <VscAccount size={24} />,
-      label: "Profile",
-      onClick: () => setActivePage("user"),
-    },
+    // {
+    //   icon: <VscGraph size={24} />,
+    //   label: "Budgets",
+    //   onClick: () => setActivePage("budgets"),
+    // },
     {
       icon: <VscColorMode size={24} />,
       label: "Theme",
       onClick: () => setIsDarkMode((prev) => !prev),
     },
+    // {
+    //   icon: <VscRocket size={24} />,
+    //   label: "Goals",
+    //   onClick: () => setActivePage("goals"),
+    // },
+
     {
-      icon: <VscSettingsGear size={24} />,
-      label: "Settings",
-      onClick: () => setActivePage("settings"),
+      icon: <VscAccount size={24} />,
+      label: "Profile",
+      onClick: () => setActivePage("user"),
+    },
+
+    {
+      icon: <VscRocket size={24} />,
+      label: "Explore",
+      onClick: () => setActivePage("explore"),
     },
   ];
 
@@ -138,6 +199,8 @@ export default function App() {
               setIsModalOpen(true);
             }}
             onDelete={handleDelete}
+            onAddIncome={() => openAddModal("income")}
+            onAddExpense={() => openAddModal("expense")}
           />
         );
       case "user":
@@ -149,8 +212,32 @@ export default function App() {
             onAddExpense={() => openAddModal("expense")}
           />
         );
-      case "settings":
-        return <Settings setActivePage={setActivePage} />;
+      case "explore":
+        return (
+          <Settings
+            setActivePage={setActivePage}
+            openNotifications={() => setIsNotifOpen(true)}
+          />
+        );
+      case "budgets":
+        return <Budgets transactions={transactions} />;
+      case "goals":
+        return <Goals />;
+      case "wallet":
+        return <Wallet />;
+      case "subscriptions":
+        return <Subscriptions />;
+      case "about":
+        return <AboutUs />;
+
+      case "privacy":
+        return <PrivacyPolicy />;
+
+      case "terms":
+        return <TermsOfService />;
+
+      case "contact":
+        return <ContactSupport />;
       default:
         return <Dashboard transactions={transactions} />;
     }
@@ -173,21 +260,42 @@ export default function App() {
             onClick={() => setActivePage("dashboard")}
             style={{ cursor: "pointer" }}
           >
-            <img src={logo} alt="Zorvyn Logo" className="logo" />
+            <img src={logo} alt="Finexa Logo" className="logo" />
             <h1>
               <span className="text-gradient">Finexa</span>
             </h1>
           </div>
         </div>
+
         <div className="header-right">
-          <VscBell className="icon" onClick={() => setIsNotifOpen(true)} />
+          <div className="notification-wrapper">
+            <VscBell className="icon" onClick={() => setIsNotifOpen(true)} />
+
+            {notifications.length > 0 && (
+              <span className="notification-badge">{notifications.length}</span>
+            )}
+          </div>
+
           <div
             className="user-box"
             onClick={() => setActivePage("user")}
             style={{ cursor: "pointer" }}
           >
-            <span className="avatar">👤</span>
-            <span>Harshith</span>
+            <img
+              src={user?.photoURL}
+              alt="profile"
+              referrerPolicy="no-referrer"
+              crossOrigin="anonymous"
+              onLoad={() => console.log("LOADED")}
+              onError={(e) => console.log("FAILED", e)}
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+              }}
+            />
+
+            <span>{user?.displayName}</span>
           </div>
         </div>
       </header>
@@ -282,15 +390,23 @@ export default function App() {
             <span className="text-gradient">Finexa</span>
           </div>
           <div className="footer-links">
-            <a href="#about">About Us</a>
-            <a href="#privacy">Privacy Policy</a>
-            <a href="#terms">Terms of Service</a>
-            <a href="#contact">Contact Support</a>
+            <button onClick={() => setActivePage("about")}>About Us</button>
+
+            <button onClick={() => setActivePage("privacy")}>
+              Privacy Policy
+            </button>
+
+            <button onClick={() => setActivePage("terms")}>
+              Terms of Service
+            </button>
+
+            <button onClick={() => setActivePage("contact")}>
+              Contact Support
+            </button>
           </div>
         </div>
         <div className="footer-bottom">
-          &copy; {new Date().getFullYear()} Finexa. All rights reserved. Made in
-          India.
+          &copy; {new Date().getFullYear()} Finexa. M Harshith Sai Krishna. NITW
         </div>
       </footer>
 
@@ -317,12 +433,15 @@ export default function App() {
                 <button onClick={() => setIsNotifOpen(false)}>✕</button>
               </div>
               <div className="notif-list">
-                <div className="notif-item">
-                  ₹30,000 added to balance <span>2 min ago</span>
-                </div>
-                <div className="notif-item">
-                  ₹1,200 spent on Shopping <span>10 min ago</span>
-                </div>
+                {notifications.length > 0 ? (
+                  notifications.map((n) => (
+                    <div key={n.id} className="notif-item">
+                      {n.message}
+                    </div>
+                  ))
+                ) : (
+                  <div className="notif-item">No notifications yet</div>
+                )}
               </div>
             </motion.div>
           </>

@@ -1,246 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./Settings.css";
+import EMICalculator from "./EMICalculator";
 
 const settingsData = [
   {
-    title: "Organization",
-    items: ["Profile", "Branding", "Currencies", "Opening Balances"],
+    title: "Account",
+    items: ["Profile", "Notifications"],
   },
+
   {
-    title: "Banking & Payments",
-    items: ["Cards", "Bank Accounts"],
+    title: "Finance",
+    items: ["Cards", "Budgets", "Savings Goals", "Subscriptions"],
   },
+
   {
-    title: "Taxes & Compliance",
-    items: ["Taxes", "Users & Roles"],
-  },
-  {
-    title: "Preferences",
-    items: [
-      "General",
-      "Customers and Vendors",
-      "Accountant",
-      "Timesheet",
-      "Customer Portal",
-    ],
-  },
-  {
-    title: "Sales",
-    items: ["Estimates", "Invoices", "Recurring Invoices", "Credit Notes"],
-  },
-  {
-    title: "Purchases",
-    items: ["Expenses", "Recurring Bills", "Purchase Orders"],
-  },
-  {
-    title: "Customisation",
-    items: ["Reporting Tags", "Transaction Number Series"],
+    title: "Tools",
+    items: ["EMI Calculator"],
   },
 ];
 
-function CardsPanel() {
-  const [cards, setCards] = useState(() => {
-    const saved = localStorage.getItem("cards");
-    return saved
-      ? JSON.parse(saved)
-      : [
-          {
-            id: 1,
-            bank: "Chase",
-            type: "Credit",
-            brand: "Visa",
-            last4: "4242",
-            expiry: "12/26",
-            cardholder: "Harshith",
-            balance: 50000,
-            due: 12000,
-            dueDate: "2026-04-15",
-            theme: "linear-gradient(135deg, #1e3c72, #2a5298)",
-          },
-        ];
-  });
-
-  const [activeCard, setActiveCard] = useState(() => {
-    const savedId = localStorage.getItem("activeCardId");
-    return cards.find((c) => c.id == savedId) || cards[0] || null;
-  });
-
-  const [showForm, setShowForm] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [form, setForm] = useState({
-    bank: "",
-    type: "Credit",
-    brand: "",
-    last4: "",
-    expiry: "",
-    cardholder: "",
-    balance: "",
-    due: "",
-    dueDate: "",
-  });
-
-  useEffect(() => {
-    localStorage.setItem("cards", JSON.stringify(cards));
-  }, [cards]);
-
-  useEffect(() => {
-    if (activeCard) localStorage.setItem("activeCardId", activeCard.id);
-  }, [activeCard]);
-
-  const resetForm = () =>
-    setForm({
-      bank: "",
-      type: "Credit",
-      brand: "",
-      last4: "",
-      expiry: "",
-      cardholder: "",
-      balance: "",
-      due: "",
-      dueDate: "",
-    });
-
-  const handleAddCard = () => {
-    const newCard = {
-      ...form,
-      id: Date.now(),
-      theme: "linear-gradient(135deg, #667eea, #764ba2)",
-    };
-    setCards([...cards, newCard]);
-    setActiveCard(newCard);
-    setShowForm(false);
-    resetForm();
-  };
-
-  const handleDelete = () => {
-    const updated = cards.filter((c) => c.id !== activeCard.id);
-    setCards(updated);
-    setActiveCard(updated[0] || null);
-  };
-
-  const handleEdit = () => {
-    const updated = cards.map((c) =>
-      c.id === activeCard.id ? { ...activeCard, ...form } : c,
-    );
-    setCards(updated);
-    setActiveCard({ ...activeCard, ...form });
-    setEditMode(false);
-    setShowForm(false);
-  };
-
-  return (
-    <div className="cards-panel">
-      <div className="cards-list">
-        <h4>Your Saved Cards</h4>
-        {cards.map((card) => (
-          <div
-            key={card.id}
-            className={`card-list-item ${activeCard?.id === card.id ? "active" : ""}`}
-            onClick={() => setActiveCard(card)}
-          >
-            <div>
-              <strong>
-                {card.bank} {card.brand}
-              </strong>
-              <span> •••• {card.last4}</span>
-              <div style={{ fontSize: "12px", opacity: 0.7 }}>{card.type}</div>
-            </div>
-          </div>
-        ))}
-        <button
-          className="add-card-btn"
-          onClick={() => {
-            resetForm();
-            setShowForm(true);
-            setEditMode(false);
-          }}
-        >
-          + Add New Card
-        </button>
-      </div>
-
-      {activeCard && !showForm && (
-        <div className="card-preview">
-          <h4>{activeCard.type} Card Details</h4>
-          <div className="visual-card" style={{ background: activeCard.theme }}>
-            <p>{activeCard.bank}</p>
-            <p className="vc-number">•••• •••• •••• {activeCard.last4}</p>
-            <p>{activeCard.cardholder}</p>
-          </div>
-          <div style={{ marginTop: "1rem" }}>
-            <p>
-              <strong>Balance:</strong> ₹{activeCard.balance}
-            </p>
-            {activeCard.type === "Credit" && (
-              <>
-                <p>
-                  <strong>Due:</strong> ₹{activeCard.due}
-                </p>
-                <p>
-                  <strong>Due Date:</strong> {activeCard.dueDate}
-                </p>
-              </>
-            )}
-          </div>
-          <div className="card-actions">
-            <button
-              onClick={() => {
-                setForm(activeCard);
-                setEditMode(true);
-                setShowForm(true);
-              }}
-            >
-              Edit
-            </button>
-            <button className="danger" onClick={handleDelete}>
-              Delete
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showForm && (
-        <div className="card-form">
-          <h4>{editMode ? "Edit Card" : "Add Card"}</h4>
-          <input
-            placeholder="Bank Name"
-            value={form.bank}
-            onChange={(e) => setForm({ ...form, bank: e.target.value })}
-          />
-          <select
-            value={form.type}
-            onChange={(e) => setForm({ ...form, type: e.target.value })}
-          >
-            <option>Credit</option>
-            <option>Debit</option>
-          </select>
-          <input
-            placeholder="Brand (Visa/Mastercard)"
-            value={form.brand}
-            onChange={(e) => setForm({ ...form, brand: e.target.value })}
-          />
-          <input
-            placeholder="Last 4 Digits"
-            maxLength="4"
-            value={form.last4}
-            onChange={(e) => setForm({ ...form, last4: e.target.value })}
-          />
-          <input
-            placeholder="Cardholder Name"
-            value={form.cardholder}
-            onChange={(e) => setForm({ ...form, cardholder: e.target.value })}
-          />
-          <button onClick={editMode ? handleEdit : handleAddCard}>
-            {editMode ? "Update Card" : "Save Card"}
-          </button>
-          <button onClick={() => setShowForm(false)}>Cancel</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function Settings({ setActivePage }) {
+export default function Settings({ setActivePage, openNotifications }) {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -254,9 +33,8 @@ export default function Settings({ setActivePage }) {
 
   const renderDetailContent = (item) => {
     switch (item) {
-      case "Cards":
-        return <CardsPanel />;
-
+      case "EMI Calculator":
+        return <EMICalculator />;
       case "Currencies":
         return (
           <div className="settings-custom-content">
@@ -437,14 +215,17 @@ export default function Settings({ setActivePage }) {
 
   return (
     <div className="settings-page">
-      <h2>All Settings</h2>
+      <h2 className="text-gradient">Explore</h2>
+      <p className="explore-subtitle">
+        Discover financial tools, cards, reports, budgets, goals and
+        productivity features.
+      </p>{" "}
       <input
         className="settings-search"
-        placeholder="Search for settings (e.g. Taxes, Cards)..."
+        placeholder="Search Explore features (Cards, Reports, Goals, Taxes...)"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-
       <div className="settings-grid">
         {filtered.map((section, i) => (
           <React.Fragment key={i}>
@@ -458,6 +239,21 @@ export default function Settings({ setActivePage }) {
                     if (item === "Profile") {
                       setSelected(null);
                       setActivePage("user");
+                    } else if (item === "Notifications") {
+                      setSelected(null);
+                      openNotifications();
+                    } else if (item === "Cards") {
+                      setSelected(null);
+                      setActivePage("wallet");
+                    } else if (item === "Budgets") {
+                      setSelected(null);
+                      setActivePage("budgets");
+                    } else if (item === "Savings Goals") {
+                      setSelected(null);
+                      setActivePage("goals");
+                    } else if (item === "Subscriptions") {
+                      setSelected(null);
+                      setActivePage("subscriptions");
                     } else {
                       setSelected(item);
                       setSelectedIndex(i);

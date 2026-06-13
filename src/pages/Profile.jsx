@@ -1,12 +1,48 @@
 import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { VscAccount, VscShield, VscCheck, VscError } from "react-icons/vsc";
 import "./Profile.css";
+import { useEffect } from "react";
+import { getProfile, updateProfile } from "../services/profileService";
 
 export default function Profile({ role, setRole, onAddIncome, onAddExpense }) {
+  const [profileData, setProfileData] = useState({
+    bio: "",
+    occupation: "",
+    country: "",
+    phone: "",
+    currency: "INR",
+  });
   const containerVariants = {
     hidden: { opacity: 0 },
     show: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  };
+  const { user, logout } = useAuth();
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  useEffect(() => {
+    async function loadProfile() {
+      if (!user) return;
+
+      const data = await getProfile(user.uid);
+
+      if (data) {
+        setProfileData({
+          bio: data.bio || "",
+          occupation: data.occupation || "",
+          country: data.country || "",
+          phone: data.phone || "",
+          currency: data.currency || "INR",
+        });
+      }
+    }
+
+    loadProfile();
+  }, [user]);
+  const handleSaveProfile = async () => {
+    await updateProfile(user.uid, profileData);
+
+    alert("Profile updated successfully!");
   };
 
   const itemVariants = {
@@ -53,7 +89,8 @@ export default function Profile({ role, setRole, onAddIncome, onAddExpense }) {
       dueDate: "",
     });
   };
-
+  console.log("User:", user);
+  console.log("Photo URL:", user?.photoURL);
   return (
     <motion.div
       className="profile-container"
@@ -71,10 +108,19 @@ export default function Profile({ role, setRole, onAddIncome, onAddExpense }) {
           variants={itemVariants}
           className="profile-card glass-panel"
         >
-          <div className="avatar-large">👤</div>
-          <h3>Harshith Sai</h3>
+          <img
+            src={user?.photoURL}
+            alt="Profile"
+            className="avatar-image"
+            referrerPolicy="no-referrer"
+            crossOrigin="anonymous"
+            onLoad={() => console.log("LOADED")}
+            onError={(e) => console.log("FAILED", e)}
+          />
+          <h3>{user?.displayName}</h3>
+
           <a
-            href="mailto:harshithsai301@gmail.com"
+            href={`mailto:${user?.email}`}
             style={{
               color: "inherit",
               textDecoration: "none",
@@ -82,11 +128,129 @@ export default function Profile({ role, setRole, onAddIncome, onAddExpense }) {
               padding: "10px",
             }}
           >
-            harshithsai301@gmail.com
+            {user?.email}
           </a>
+
           <div className={`role-badge ${role}`}>
             <VscShield /> {role.toUpperCase()}
           </div>
+
+          {!isEditingProfile ? (
+            <>
+              <div className="profile-info">
+                <p>
+                  <strong>Bio:</strong> {profileData.bio || "Not specified"}
+                </p>
+
+                <p>
+                  <strong>Occupation:</strong>{" "}
+                  {profileData.occupation || "Not specified"}
+                </p>
+
+                <p>
+                  <strong>Country:</strong>{" "}
+                  {profileData.country || "Not specified"}
+                </p>
+
+                <p>
+                  <strong>Phone:</strong> {profileData.phone || "Not specified"}
+                </p>
+
+                <p>
+                  <strong>Currency:</strong> {profileData.currency}
+                </p>
+              </div>
+
+              <button
+                className="btn-card"
+                style={{ width: "100%", marginTop: "1rem" }}
+                onClick={() => setIsEditingProfile(true)}
+              >
+                ✏️ Edit Profile
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="profile-edit-form">
+                <input
+                  placeholder="Bio"
+                  value={profileData.bio}
+                  onChange={(e) =>
+                    setProfileData({
+                      ...profileData,
+                      bio: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  placeholder="Occupation"
+                  value={profileData.occupation}
+                  onChange={(e) =>
+                    setProfileData({
+                      ...profileData,
+                      occupation: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  placeholder="Country"
+                  value={profileData.country}
+                  onChange={(e) =>
+                    setProfileData({
+                      ...profileData,
+                      country: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  placeholder="Phone"
+                  value={profileData.phone}
+                  onChange={(e) =>
+                    setProfileData({
+                      ...profileData,
+                      phone: e.target.value,
+                    })
+                  }
+                />
+
+                <select
+                  value={profileData.currency}
+                  onChange={(e) =>
+                    setProfileData({
+                      ...profileData,
+                      currency: e.target.value,
+                    })
+                  }
+                >
+                  <option value="INR">INR ₹</option>
+                  <option value="USD">USD $</option>
+                  <option value="EUR">EUR €</option>
+                </select>
+
+                <div className="profile-actions">
+                  <button
+                    className="btn-income"
+                    onClick={async () => {
+                      await handleSaveProfile();
+                      setIsEditingProfile(false);
+                    }}
+                  >
+                    Save
+                  </button>
+
+                  <button
+                    className="btn-expense"
+                    onClick={() => setIsEditingProfile(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </motion.div>
 
         <motion.div
@@ -160,11 +324,8 @@ export default function Profile({ role, setRole, onAddIncome, onAddExpense }) {
                 </div>
 
                 <div className="action-row single">
-                  <button
-                    className="btn-card"
-                    onClick={() => setShowCardForm(true)}
-                  >
-                    + Add Card
+                  <button className="btn-logout" onClick={logout}>
+                    Logout
                   </button>
                 </div>
               </div>

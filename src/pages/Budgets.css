@@ -1,0 +1,263 @@
+.budgets-page {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.budget-header {
+  margin-bottom: 0.5rem;
+}
+
+.budget-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.budget-header p {
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+.budget-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.budget-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 220px auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.budget-form input {
+  margin: 0;
+}
+
+.create-budget-btn {
+  height: 48px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+
+  transition: all 0.25s ease;
+}
+
+.create-budget-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+}
+
+.budgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+}
+
+.budget-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 1.5rem;
+
+  backdrop-filter: blur(20px);
+  position: relative;
+
+  overflow: hidden;
+
+  transition: all 0.3s ease;
+}
+
+.budget-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: radial-gradient(
+    circle at top right,
+    rgba(99, 102, 241, 0.15),
+    transparent 50%
+  );
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.budget-card:hover::before {
+  opacity: 1;
+}
+
+.budget-card:hover {
+  transform: translateY(-4px);
+}
+
+.budget-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.budget-card-top h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.budget-percent {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #818cf8;
+}
+
+.budget-values {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.budget-spent {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.budget-limit {
+  color: var(--text-secondary);
+}
+
+.progress-track {
+  margin-top: 1rem;
+  width: 100%;
+  height: 12px;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+
+  transition: width 0.4s ease;
+}
+
+.progress-fill.safe {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.progress-fill.warning {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.progress-fill.danger {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.budget-status {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.budget-status.safe {
+  color: #22c55e;
+}
+
+.budget-status.warning {
+  color: #f59e0b;
+}
+
+.budget-status.danger {
+  color: #ef4444;
+}
+
+.delete-budget-btn {
+  width: 100%;
+  margin-top: 1rem;
+
+  border: none;
+
+  background: rgba(239, 68, 68, 0.15);
+
+  color: #ef4444;
+
+  padding: 0.8rem;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.delete-budget-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.empty-budgets {
+  text-align: center;
+  padding: 3rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .budget-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .budgets-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.budget-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.delete-budget-btn {
+  position: relative;
+  z-index: 10;
+}
+@media (max-width: 768px) {
+  .goal-header h2,
+  .budget-header h2 {
+    font-size: 1.6rem;
+  }
+  .goal-card,
+  .budget-card {
+    padding: 1.2rem;
+  }
+  .goal-saved,
+  .budget-spent {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .goal-actions,
+  .budget-actions {
+    flex-direction: column;
+  }
+  .goal-top,
+  .budget-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

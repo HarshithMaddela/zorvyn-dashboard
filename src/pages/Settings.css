@@ -424,3 +424,29 @@
   color: var(--text);
   animation: fadeSlide 0.3s ease;
 }
+.settings-detail {
+  width: 100%;
+}
+@media (max-width: 768px) {
+  .settings-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+  .settings-table {
+    min-width: 500px;
+  }
+  .card-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-header h3 {
+    font-size: 1.1rem;
+  }
+  .settings-detail {
+    padding: 1rem;
+  }
+}

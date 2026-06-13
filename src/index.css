@@ -317,15 +317,21 @@ body {
   gap: 1.5rem;
 }
 
-.footer-links a {
+.footer-links button {
+  background: none;
+  border: none;
+  cursor: pointer;
+
   color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
+  font-size: 0.95rem;
+  font-family: inherit;
+
+  transition: all 0.25s ease;
 }
 
-.footer-links a:hover {
+.footer-links button:hover {
   color: var(--accent);
+  transform: translateY(-2px);
 }
 
 .footer-bottom {
@@ -411,4 +417,145 @@ body {
 [data-theme="dark"] .logo {
   filter: drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white)
     drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white);
+}
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  z-index: 9998;
+}
+
+.mobile-drawer {
+  position: fixed;
+
+  bottom: 85px;
+  right: 15px;
+
+  width: 220px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 1rem;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 18px;
+
+  backdrop-filter: blur(20px);
+
+  box-shadow: var(--shadow);
+
+  z-index: 9999;
+}
+
+.mobile-drawer button {
+  width: 100%;
+}
+
+@media (min-width: 769px) {
+  .mobile-nav,
+  .mobile-drawer,
+  .mobile-menu-overlay {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .app-footer {
+    padding-bottom: 110px;
+  }
+}
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background: #ef4444;
+  color: white;
+
+  font-size: 0.7rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.legal-page {
+  max-width: 900px;
+  margin: 0 auto;
+
+  padding: 2rem;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  backdrop-filter: blur(20px);
+
+  box-shadow: var(--shadow);
+}
+
+.legal-page h1 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.legal-page p,
+.legal-page li {
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.legal-page ul {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.support-card {
+  margin-top: 1.5rem;
+
+  padding: 1rem;
+
+  background: var(--accent-soft);
+
+  border-radius: 14px;
+
+  border: 1px solid var(--border);
+}
+@media (max-width: 768px) {
+  main {
+    padding: 5rem 1rem 1rem !important;
+  }
+
+  .modal {
+    width: 90%;
+    max-width: 350px;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    align-items: flex-end;
+  }
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-bottom: 2rem;
+  }
 }

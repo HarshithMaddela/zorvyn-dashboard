@@ -53,6 +53,39 @@
   margin: 0 auto;
 }
 
+.transaction-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.action-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 0.9rem 1.5rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.income-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.expense-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .transaction-actions {
+    flex-direction: column;
+  }
+}
 .glass {
   background: var(--card);
   backdrop-filter: blur(22px);
@@ -332,5 +365,39 @@ button {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@media (max-width: 768px) {
+  .glass {
+    padding: 1.2rem;
+  }
+  .stat p {
+    font-size: 1.8rem;
+  }
+  .summary-grid p {
+    font-size: 1.5rem;
+  }
+  .table-responsive-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tx-table {
+    min-width: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h2 {
+    font-size: 1.6rem;
+  }
+  .placeholder-page {
+    padding: 2rem 1rem;
+  }
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .actions button {
+    width: 100%;
   }
 }

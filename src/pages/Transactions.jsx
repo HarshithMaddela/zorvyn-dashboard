@@ -1,3 +1,5 @@
+/* Transactions.jsx */
+
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -15,6 +17,8 @@ export default function Transactions({
   role,
   onEdit,
   onDelete,
+  onAddIncome,
+  onAddExpense,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -67,7 +71,17 @@ export default function Transactions({
         <h2 className="text-gradient">Transactions</h2>
         <p>Manage and track your recent activity</p>
       </div>
+      {role === "admin" && (
+        <div className="transaction-actions">
+          <button className="action-btn income-btn" onClick={onAddIncome}>
+            + Add Income
+          </button>
 
+          <button className="action-btn expense-btn" onClick={onAddExpense}>
+            + Add Expense
+          </button>
+        </div>
+      )}
       <div className="controls-container glass-panel">
         <div className="search-bar">
           <VscSearch className="control-icon" />

@@ -15,6 +15,7 @@ import AboutUs from "./pages/AboutUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ContactSupport from "./pages/ContactSupport";
+import AdminDashboard from "./pages/AdminDashboard";
 
 import Subscriptions from "./pages/Subscriptions";
 import { createNotification } from "./services/notificationService";
@@ -177,6 +178,16 @@ export default function App() {
       label: "Theme",
       onClick: () => setIsDarkMode((prev) => !prev),
     },
+
+    ...(user?.email === "harshithsai301@gmail.com"
+      ? [
+          {
+            icon: <VscSettingsGear size={24} />,
+            label: "Admin",
+            onClick: () => setActivePage("admin"),
+          },
+        ]
+      : []),
     // {
     //   icon: <VscRocket size={24} />,
     //   label: "Goals",
@@ -240,6 +251,12 @@ export default function App() {
         return <Subscriptions />;
       case "about":
         return <AboutUs />;
+      case "admin":
+        return user?.email === "harshithsai301@gmail.com" ? (
+          <AdminDashboard />
+        ) : (
+          <Dashboard transactions={transactions} />
+        );
 
       case "privacy":
         return <PrivacyPolicy />;

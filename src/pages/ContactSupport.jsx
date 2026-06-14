@@ -1,10 +1,22 @@
 import { useState } from "react";
 import { FiMail, FiBriefcase, FiClock, FiHelpCircle } from "react-icons/fi";
 import "./LegalPages.css";
+import { useAuth } from "../context/AuthContext";
+import { createSupportRequest } from "../services/supportService";
+import { useEffect } from "react";
 
 export default function ContactSupport() {
+  const { user } = useAuth();
   const [submitted, setSubmitted] = useState(false);
-
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: user.displayName || "",
+        email: user.email || "",
+      }));
+    }
+  }, [user]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,6 +36,15 @@ export default function ContactSupport() {
     e.preventDefault();
 
     try {
+      await createSupportRequest({
+        uid: user?.uid || null,
+        name: formData.name,
+        email: formData.email,
+        category: formData.category,
+        subject: formData.subject,
+        message: formData.message,
+      });
+
       setSubmitted(true);
 
       setFormData({
@@ -38,7 +59,8 @@ export default function ContactSupport() {
         setSubmitted(false);
       }, 5000);
     } catch (error) {
-      console.error(error);
+      console.error("Support Request Error:", error);
+      alert("Failed to submit support request.");
     }
   };
 

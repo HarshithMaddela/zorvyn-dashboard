@@ -1,191 +1,427 @@
-# Zorvyn Insights
+# Finexa
 
-**Live Demo:** https://zorvyn-dashboard-pi.vercel.app/
+**Live Demo:** https://finexa-v2.vercel.app/
 
-A modern, interactive finance dashboard built to track income, expenses and financial insights with a clean UI and smooth user experience.
-
-## Overview
-
-Basically Zorvyn Insights is a frontend-focused finance dashboard designed to demonstrate:
-
-1. UI/UX design thinking and creativity
-2. Components-based architecture
-3. State management
-4. Interactive data visualization
-5. Local Storage
-
-This project simulates a real-world financial tracking application without backend.
-
-## Features
-
-### Dock
-
-1. macOS-inspired bottom navigation dock
-2. Smooth hover magnification effect
-3. Tooltip labels for better usability
-4. Inspired by UI Components from ReactBits.dev
-
-### Dashboard
-
-1. Total Income, Expenses and Balance cards
-2. Time-based chart (Balance & Expense trends) --> Graph
-3. Category-based chart (Spending breakdown) --> Pie Chart
-4. Smart insights:
-5. Highest spending category
-6. Largest expense
-7. Savings observation(Percentage wise --> Good or Bad)
+A modern, full-stack personal finance management platform built with React, Firebase and Firestore. Finexa helps users track expenses, manage budgets, monitor financial goals, organize subscriptions and gain actionable insights through a clean and interactive user experience.
 
 ---
 
-### Transactions
+# Overview
 
-- View all transactions with:
-  1. Date
-  2. Amount
-  3. Category & Description
-  4. Type (Income / Expense)
+Finexa started as a frontend finance dashboard and gradually evolved into a full-stack application with authentication, cloud data storage, support management and administrative controls.
 
-- Features:
-  1. Search among transactions
-  2. Filter by type
-  3. Sorting
+The project focuses on:
 
-### Role-Based UI
+* Modern UI/UX Design
+* Real-world Application Architecture
+* Firebase Authentication
+* Firestore Database Integration
+* Secure Data Management
+* Financial Tracking & Insights
+* Admin Management System
+* Responsive Design
 
-- Simulated roles:
-  1. **Admin** --> Can add, edit and delete
-  2. **Viewer** --> Read-only access
+Unlike traditional frontend-only dashboards, Finexa stores user-specific data securely in Firestore and provides personalized financial management tools.
 
-### Quick Actions
+---
 
-1. Add Income or Expense directly from Profile
-2. Instant updates across dashboard and charts
-3. Add Cards(Credit or Debit cards)
+# Features
 
-### Insights Engine
+## Authentication
 
-- Automatically calculates:
-  1. Spending patterns
-  2. Savings rate
-  3. Key financial observations
+* Google Sign-In using Firebase Authentication
+* Persistent Login Sessions
+* User-specific Data Access
+* Protected Routes
+* Secure Firestore Rules
 
-### Settings System
+---
 
-1. Interactive settings UI
-2. Cards management (Add/Edit/Delete cards)
-3. Currency, tax, and preference sections(No backend)
+## Dashboard
 
-### UI & UX Highlights
+Track your financial health at a glance.
 
-1. Glassmorphism design
-2. Gradient-based modern UI
-3. Animated dock navigation (macOS-inspired)
-4. Smooth transitions using Framer Motion
-5. Dark / Light theme support
+Features:
 
-### Data Persistence
+* Total Income Card
+* Total Expenses Card
+* Net Balance Card
+* Financial Summary
+* Real-time Calculations
 
-- Uses **LocalStorage** to store:
-  1. Transactions
-  2. Cards
-  3. User state
-  4. Dashboard content and Insights
+### Analytics & Visualizations
 
-## Tech Stack
+* Balance Trend Chart
+* Expense Trend Chart
+* Expense Distribution Pie Chart
 
-1. **React.js**
-2. **Framer Motion** (for smooth animations)
-3. **Recharts** (for data visualization)
-4. **CSS (custom styling)**
-5. **React Icons** (For Icons)
+### Smart Insights
 
-## Project Structure
+Automatically calculates:
 
-```
+* Highest Spending Category
+* Largest Expense
+* Financial Observations
+
+---
+
+## Transactions Management
+
+Manage all financial transactions.
+
+Features:
+
+* Add Transactions
+* Edit Transactions
+* Delete Transactions
+* Income Tracking
+* Expense Tracking
+
+Each transaction includes:
+
+* Amount
+* Category
+* Description
+* Date
+* Transaction Type
+
+---
+
+## Budgets
+
+Create spending limits and monitor financial discipline.
+
+Features:
+
+* Add Budgets
+* Category-wise Budgets
+* Budget Tracking
+
+---
+
+## Goals
+
+Set and track financial goals.
+
+Features:
+
+* Create Savings Goals
+* Target Amount Tracking
+* Progress Monitoring
+* Goal Completion Tracking
+
+---
+
+## Subscription Tracker
+
+Monitor recurring payments.
+
+Features:
+
+* Add Subscriptions
+* Track Monthly Expenses
+* Renewal Management
+* Subscription Overview
+
+Examples:
+
+* Netflix
+* Spotify
+* Prime Video
+* Custom Subscriptions
+
+---
+
+## Wallet Management
+
+Organize payment methods.
+
+Features:
+
+* Add Wallets
+* Track Available Balance
+* Manage Multiple Wallets
+
+Examples:
+
+* Cash Wallet
+* Bank Account
+* UPI Wallet
+* Digital Wallets
+
+---
+
+## Cards Management
+
+Manage financial cards.
+
+Features:
+
+* Add Debit Cards
+* Add Credit Cards
+* Card Organization
+* Secure Firestore Storage
+
+---
+
+## Profile System
+
+User profile management.
+
+Features:
+
+* Google Profile Integration
+* User Information Display
+* Personalized Experience
+
+---
+
+# Admin Dashboard
+
+A dedicated admin panel for platform management.
+
+Features:
+
+### User Management
+
+* View Total Registered Users
+* User Directory Popup
+* User Names
+* Email Addresses
+* Profile Images
+
+### Support Management
+
+* View Support Requests
+* View Ticket Categories
+* Track Ticket Status
+* Mark Tickets as Resolved
+* Sort Tickets by Date
+
+### Analytics
+
+* Total Users
+* Total Support Tickets
+
+Admin access is protected through Firestore Security Rules.
+
+---
+
+# Firebase Integration
+
+## Firebase Authentication
+
+* Google Authentication
+* Session Persistence
+* Secure Login Flow
+
+## Firestore Database
+
+Collections include:
+
+* users
+* transactions
+* budgets
+* goals
+* subscriptions
+* cards
+* supportRequests
+
+## Security Rules
+
+Implemented Firestore Rules for:
+
+* User-specific Data Protection
+* Authenticated Access
+* Admin-only Support Management
+* Secure Read/Write Operations
+
+---
+
+# UI & UX Highlights
+
+* Modern Glassmorphism Design
+* Gradient-Based Visuals
+* Smooth Animations
+* Framer Motion Integration
+* Responsive Layout
+* Mobile-Friendly Design
+* Clean Navigation
+* Dark Theme Experience
+
+---
+
+# Data Persistence
+
+All user data is securely stored using Firestore.
+
+Stored Data:
+
+* Transactions
+* Budgets
+* Goals
+* Subscriptions
+* Wallets
+* Cards
+* Support Requests
+* User Profiles
+
+---
+
+# Tech Stack
+
+### Frontend
+
+* React.js
+* React Router
+* Framer Motion
+* Recharts
+* React Icons
+
+### Backend & Database
+
+* Firebase Authentication
+* Firebase Firestore
+
+### Deployment
+
+* Vercel
+
+### Styling
+
+* CSS3
+
+---
+
+# Project Structure
+
+```text
 src/
-│── pages/
-│   ├── Dashboard.jsx
-│   ├── Dashboard.css
-│   ├── Transactions.jsx
-│   ├── Transactions.css
-│   ├── Profile.jsx
-│   ├── Profile.css
-│   ├── Settings.jsx
-│   ├── Settings.css
-│   ├── Dock.jsx
-│   ├── Dock.css
 │
-│── App.jsx
-│── index.css
+│
+├── context/
+│   └── AuthContext.jsx
+│
+├── firebase/
+│   └── firebase.js
+│
+├── services/
+│   ├── goalService.js
+│   ├── supportService.js
+│   ├── adminService.js
+│   ├── budgetService.js
+│   └── transactionService.js
+│
+├── pages/
+│   ├── Dashboard.jsx
+│   ├── Transactions.jsx
+│   ├── Budgets.jsx
+│   ├── Goals.jsx
+│   ├── Wallet.jsx
+│   ├── Subscriptions.jsx
+│   ├── Profile.jsx
+│   ├── Settings.jsx
+│   ├── ContactSupport.jsx
+│   ├── AdminDashboard.jsx
+│   ├── AboutUs.jsx
+│   ├── PrivacyPolicy.jsx
+│   └── TermsOfService.jsx
+│
+├── App.jsx
+├── main.jsx
+└── index.css
 ```
 
-## Setup Instructions
+---
 
-1. Clone the repository:
+# Setup Instructions
 
-```
-git clone https://github.com/HarshithMaddela/zorvyn-dashboard.git
-```
+### Clone Repository
 
-2. Navigate into the project:
-
-```
-cd finance-dashboard
+```bash
+git clone https://github.com/HarshithMaddela/finexa-dashboard.git
 ```
 
-3. Install dependencies:
+### Navigate to Project
 
+```bash
+cd finexa-dashboard
 ```
+
+### Install Dependencies
+
+```bash
 npm install
 ```
 
-4. Run the development server:
+### Configure Firebase
 
+Create a Firebase project and add your configuration inside:
+
+```javascript
+firebase.js
 ```
+
+Enable:
+
+* Google Authentication
+* Cloud Firestore
+
+### Run Development Server
+
+```bash
 npm run dev
 ```
 
-## Screenshots
+### Build for Production
 
-### Dashboard
+```bash
+npm run build
+```
 
-![Dashboard](./screenshots/DashboardPage.png)
+---
 
-### Transactions
+# What I Learned While Building Finexa
 
-![Transactions](./screenshots/TransactionsPage.png)
+This project helped me learn far beyond frontend development.
 
-### Profile
+Key areas explored:
 
-![Profile](./screenshots/ProfilePage.png)
+* Firebase Authentication
+* Firestore Database Design
+* Firestore Security Rules
+* User Access Control
+* Admin Dashboards
+* Cloud Data Storage
+* React State Management
+* Real-world Debugging
+* Chrome Developer Tools
+* Browser Console Debugging
+* Deployment & Production Workflows
 
-### Settings
+Finexa taught me that building real projects is one of the most effective ways to learn software development.
 
-![Settings](./screenshots/SettingsPage.png)
+---
 
-## Approach & Thought Process
+# Author
 
-This project was designed with a focus on:
+**Harshith Sai**
 
-1. **User experience first** → intuitive navigation and interactions
-2. **Component modularity** → reusable and scalable structure
-3. **State-driven UI** → all views react to data changes
-4. **Clean design** → minimal, readable and modern
+GitHub:
+https://github.com/HarshithMaddela
 
-Special attention was given to:
+---
 
-1. Real-time data updates
-2. Interactive and responsive layout
-3. Smooth and role based UI and Theme
+# Repository
 
-## Conclusion
+https://github.com/HarshithMaddela/finexa-dashboard
 
-This project demonstrates how a frontend application can be structured, styled and made interactive using modern tools and best practices.
+# Live Demo
 
-## Author
+https://finexa-v2.vercel.app/
 
-Harshith Sai
+---
 
-## License
+# License
 
-This project is for evaluation and learning purposes.
+This project is built for learning, experimentation and portfolio purposes.

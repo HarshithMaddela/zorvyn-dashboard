@@ -25,15 +25,19 @@ export default function Transactions({
   const [sortBy, setSortBy] = useState("date-desc");
 
   const filteredAndSortedTransactions = useMemo(() => {
-    let result = [...transactions];
-
+    let result = transactions.map((t) => ({
+      ...t,
+      amount: Number(t.amount || 0),
+    }));
     if (searchTerm) {
       result = result.filter(
         (t) =>
-          (t.description &&
-            t.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (t.category &&
-            t.category.toLowerCase().includes(searchTerm.toLowerCase())),
+          String(t.description || "")
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          String(t.category || "")
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -44,8 +48,11 @@ export default function Transactions({
     result.sort((a, b) => {
       if (sortBy === "date-desc") return new Date(b.date) - new Date(a.date);
       if (sortBy === "date-asc") return new Date(a.date) - new Date(b.date);
-      if (sortBy === "amount-desc") return b.amount - a.amount;
-      if (sortBy === "amount-asc") return a.amount - b.amount;
+      if (sortBy === "amount-desc")
+        return Number(b.amount || 0) - Number(a.amount || 0);
+
+      if (sortBy === "amount-asc")
+        return Number(a.amount || 0) - Number(b.amount || 0);
       return 0;
     });
 
@@ -127,7 +134,7 @@ export default function Transactions({
           {filteredAndSortedTransactions.length > 0 ? (
             filteredAndSortedTransactions.map((t) => (
               <motion.div
-                key={t.id}
+                key={t.id || `${t.description}-${t.date}`}
                 variants={itemVariants}
                 exit={{ opacity: 0, x: -20 }}
                 layout
@@ -146,11 +153,10 @@ export default function Transactions({
                 <div className="tx-right">
                   <div className={`tx-amount ${t.type}`}>
                     {t.type === "income" ? "+" : "-"}₹
-                    {t.amount.toLocaleString()}
+                    {Number(t.amount || 0).toLocaleString()}{" "}
                   </div>
 
-                  <div className="tx-date">{t.date}</div>
-
+                  <div className="tx-date">{t.date || "No Date"}</div>
                   {role === "admin" && (
                     <div
                       style={{ display: "flex", gap: "8px", marginTop: "6px" }}

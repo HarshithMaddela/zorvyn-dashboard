@@ -559,3 +559,59 @@ body {
     padding-bottom: 2rem;
   }
 }
+.payment-method-picker {
+  margin-top: 10px;
+}
+
+.payment-method-picker label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.payment-option {
+  background: var(--card);
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  transition: all 0.25s ease;
+}
+
+.payment-option svg {
+  font-size: 1.3rem;
+}
+
+.payment-option:hover {
+  transform: translateY(-2px);
+}
+
+.payment-option.active {
+  border-color: #6366f1;
+
+  background: rgba(99, 102, 241, 0.15);
+
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+}
+
+@media (max-width: 600px) {
+  .payment-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

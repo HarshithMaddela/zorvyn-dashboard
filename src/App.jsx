@@ -20,7 +20,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Subscriptions from "./pages/Subscriptions";
 import { createNotification } from "./services/notificationService";
 import { getNotifications } from "./services/notificationService";
+import { FiSmartphone, FiCreditCard, FiDollarSign } from "react-icons/fi";
 
+import { BsBank } from "react-icons/bs";
+import { RiWallet3Line } from "react-icons/ri";
 import {
   VscDashboard,
   VscCreditCard,
@@ -145,6 +148,38 @@ export default function App() {
 
     setTransactions((prev) => prev.filter((t) => t.id !== id));
   };
+  const paymentMethods = [
+    {
+      value: "UPI",
+      label: "UPI",
+      icon: <FiSmartphone />,
+    },
+    {
+      value: "Cash",
+      label: "Cash",
+      icon: <FiDollarSign />,
+    },
+    {
+      value: "Debit Card",
+      label: "Debit Card",
+      icon: <FiCreditCard />,
+    },
+    {
+      value: "Credit Card",
+      label: "Credit Card",
+      icon: <FiCreditCard />,
+    },
+    {
+      value: "Net Banking",
+      label: "Net Banking",
+      icon: <BsBank />,
+    },
+    {
+      value: "Wallet",
+      label: "Wallet",
+      icon: <RiWallet3Line />,
+    },
+  ];
 
   const openAddModal = (type) => {
     setEditingTx({ type });
@@ -384,6 +419,32 @@ export default function App() {
                 <option value="income">Income</option>
                 <option value="expense">Expense</option>
               </select>
+              <div className="payment-method-picker">
+                <label>Payment Method</label>
+
+                <div className="payment-grid">
+                  {paymentMethods.map((method) => (
+                    <button
+                      key={method.value}
+                      type="button"
+                      className={`payment-option ${
+                        editingTx?.paymentMethod === method.value
+                          ? "active"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        setEditingTx({
+                          ...editingTx,
+                          paymentMethod: method.value,
+                        })
+                      }
+                    >
+                      {method.icon}
+                      <span>{method.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               <button onClick={() => handleSaveTransaction(editingTx)}>
                 Save

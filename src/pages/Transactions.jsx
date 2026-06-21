@@ -10,6 +10,10 @@ import {
   VscEdit,
   VscTrash,
 } from "react-icons/vsc";
+import { VscCreditCard } from "react-icons/vsc";
+import { FiSmartphone, FiDollarSign } from "react-icons/fi";
+import { BsBank } from "react-icons/bs";
+import { RiWallet3Line } from "react-icons/ri";
 import "./Transactions.css";
 
 export default function Transactions({
@@ -23,6 +27,7 @@ export default function Transactions({
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [sortBy, setSortBy] = useState("date-desc");
+  const [paymentFilter, setPaymentFilter] = useState("all");
 
   const filteredAndSortedTransactions = useMemo(() => {
     let result = transactions.map((t) => ({
@@ -44,6 +49,9 @@ export default function Transactions({
     if (filterType !== "all") {
       result = result.filter((t) => t.type === filterType);
     }
+    if (paymentFilter !== "all") {
+      result = result.filter((t) => t.paymentMethod === paymentFilter);
+    }
 
     result.sort((a, b) => {
       if (sortBy === "date-desc") return new Date(b.date) - new Date(a.date);
@@ -57,8 +65,7 @@ export default function Transactions({
     });
 
     return result;
-  }, [searchTerm, filterType, sortBy, transactions]);
-
+  }, [searchTerm, filterType, paymentFilter, sortBy, transactions]);
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -70,6 +77,54 @@ export default function Transactions({
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 },
+  };
+  const getPaymentMethod = (method) => {
+    switch (method) {
+      case "UPI":
+        return (
+          <>
+            <FiSmartphone /> UPI
+          </>
+        );
+
+      case "Cash":
+        return (
+          <>
+            <FiDollarSign /> Cash
+          </>
+        );
+
+      case "Debit Card":
+        return (
+          <>
+            <VscCreditCard /> Debit Card
+          </>
+        );
+
+      case "Credit Card":
+        return (
+          <>
+            <VscCreditCard /> Credit Card
+          </>
+        );
+
+      case "Wallet":
+        return (
+          <>
+            <RiWallet3Line /> Wallet
+          </>
+        );
+
+      case "Net Banking":
+        return (
+          <>
+            <BsBank /> Net Banking
+          </>
+        );
+
+      default:
+        return "Not Specified";
+    }
   };
 
   return (
@@ -121,6 +176,20 @@ export default function Transactions({
               <option value="amount-asc">Amount: Low to High</option>
             </select>
           </div>
+          <div className="filter-group">
+            <select
+              value={paymentFilter}
+              onChange={(e) => setPaymentFilter(e.target.value)}
+            >
+              <option value="all">All Payments</option>
+              <option value="Cash">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="Debit Card">Debit Card</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Net Banking">Net Banking</option>
+              <option value="Wallet">Wallet</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -147,6 +216,9 @@ export default function Transactions({
                   <div className="tx-details">
                     <h4>{t.description}</h4>
                     <span>{t.category}</span>
+                    <small className="payment-method">
+                      {getPaymentMethod(t.paymentMethod)}
+                    </small>
                   </div>
                 </div>
 
